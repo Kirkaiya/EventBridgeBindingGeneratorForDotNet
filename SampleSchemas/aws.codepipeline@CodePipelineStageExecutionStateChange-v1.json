@@ -1,0 +1,88 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"version": "1.0.0",
+		"title": "CodePipelineStageExecutionStateChange"
+	},
+	"paths": {},
+	"components": {
+		"schemas": {
+			"AWSEvent": {
+				"type": "object",
+				"required": [
+					"detail-type",
+					"resources",
+					"id",
+					"source",
+					"time",
+					"detail",
+					"region",
+					"version",
+					"account"
+				],
+				"x-amazon-events-detail-type": "CodePipeline Stage Execution State Change",
+				"x-amazon-events-source": "aws.codepipeline",
+				"properties": {
+					"detail": {
+						"$ref": "#/components/schemas/CodePipelineStageExecutionStateChange"
+					},
+					"detail-type": {
+						"type": "string"
+					},
+					"resources": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"id": {
+						"type": "string"
+					},
+					"source": {
+						"type": "string"
+					},
+					"time": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"region": {
+						"type": "string"
+					},
+					"version": {
+						"type": "string"
+					},
+					"account": {
+						"type": "string"
+					}
+				}
+			},
+			"CodePipelineStageExecutionStateChange": {
+				"type": "object",
+				"required": [
+					"pipeline",
+					"execution-id",
+					"stage",
+					"state",
+					"version"
+				],
+				"properties": {
+					"pipeline": {
+						"type": "string"
+					},
+					"execution-id": {
+						"type": "string"
+					},
+					"stage": {
+						"type": "string"
+					},
+					"state": {
+						"type": "string"
+					},
+					"version": {
+						"type": "string"
+					}
+				}
+			}
+		}
+	}
+}
