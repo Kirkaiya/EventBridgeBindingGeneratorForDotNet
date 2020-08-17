@@ -4,7 +4,7 @@ A quick and dirty (very hacky!!) .NET Core console app that generates all the cl
 
 ## Disclaimer
 
-I stopped editing the code as soon as it worked - so it's ugly, and has more opportunities for cleanup and improvement than one might expect from such a simple app.  Yes, I reassign values to the same strings. Yes, I have the same code in multiple places that could be abstracted out. More importantly, **I only tested this on some five or six different schemas**.
+I stopped editing the code as soon as it worked - so it's ugly, and has more opportunities for cleanup and improvement than one might expect from such a simple app.  Yes, I reassign values to the same strings. Yes, I have the same code in multiple places that could be abstracted out. The entire thing is just a bunch of string concatenation. I know, I know. More importantly, **I only tested this on some five or six different schemas**.
 
 Also note that there is **no exception handling**. If there's an error, you'll see it ;-)
 
