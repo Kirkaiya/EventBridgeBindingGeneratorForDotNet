@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "BindingGenerator": {
+      "commandName": "Project",
+      "commandLineArgs": "test"
+    }
+  }
+}
