@@ -16,24 +16,23 @@ This could be extended to pull the schemas directly from the AWS Schema Reposito
 
 I've put a couple of the schemas that I downloaded into the SampleSchemas folder that you can use to test with. This could also be abstracted out as a web app, so that it could be used without having to pull down this code and run it (feel free!)
 
-
-
 ## Usage
 
 From a command line in the `bin\Debug\netcoreapp3.1` folder:
-   
+
     BindingGenerator <path | test>
 
 *Example*:
-    `BindingGenerator C:\foldername\EventBridgeBindingGeneratorForDotNet\SampleSchemas\CodePipelineStageExecutionStateChange.json`
 
-If specify `test` instead of a path, the Program class will fall back to using *aws.codebuild@CodeBuildBuildPhaseChange-v1.json*, using a relative path to the SampleSchemas folder. This should work whether whether on Windows or Linux/macOS.
+    BindingGenerator C:\foldername\EventBridgeBindingGeneratorForDotNet\SampleSchemas\aws.codebuild@CodeBuildBuildPhaseChange-v1.json
+
+If specify `test` instead of a path, the Program class will fall back to using *`aws.codebuild@CodeBuildBuildPhaseChange-v1.json`*, using a relative path to the SampleSchemas folder. This should work whether whether on Windows or Linux/macOS.
 
 ## Output
 
 The output will be all of the generated C# class files in a folder named for the "title" property of the Schema (which is also the class name of the top-level class).  For each complex property in the schema (meaning, not a primitive type), a new class is created (in a new file). For some schemas, this will result in only two files, while for others it might be more than 10.  
 
-As an example, the output of `BindingGenerator test` will create the following files:
+As an example, the output of `BindingGenerator test` will create the following files for the schema `aws.codebuild@CodeBuildBuildPhaseChange-v1.json` (other schemas will lead to as few as two files):
 
  * AdditionalInformationItem.cs
  * CodeBuildBuildPhaseChange.cs
