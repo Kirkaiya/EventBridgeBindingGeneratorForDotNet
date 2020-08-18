@@ -51,7 +51,7 @@ As an example, the output of `BindingGenerator test` will create the following f
 
 ## Using Generated Classes
 
-I've only tested a single one of the classes in an actual Lambda function so far. You can use the class that has the same name as the folder they're written to as the Lambda event type, as in this example, which uses the code generated from schema aws.codepipeline@CodePipelineStageExecutionStateChange-v1.json.
+I've two sets of generated classes in actual Lambda functions so far (CodeBuildBuildPhaseChange and CodePipelineStageExecutionStateChange), and they both work (with caveat that the second one requires changing "Version" from string to int/float). You can use the class that has the same name as the folder they're written to as the Lambda event type, as in this example, which uses the code generated from schema aws.codepipeline@CodePipelineStageExecutionStateChange-v1.json.
 
 Be sure to copy the generated folder full of generated classes into your project and adjust any namespaces if desired.
 
