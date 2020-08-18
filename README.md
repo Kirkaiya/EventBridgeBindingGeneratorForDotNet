@@ -1,16 +1,14 @@
 # EventBridgeBindingGeneratorForDotNet
 
-A quick and dirty (very hacky!!) .NET Core console app that generates all the classes to use as bindings for deserializing EventBridge schemas.
+A quick and dirty (very hacky!!) .NET Core console app that generates all the classes to use as bindings for deserializing EventBridge schemas. This is handy for generating the (sometimes many) classes if you're using a .NET Core Lambda function, for instance, as the target of an [AWS EventBridge rule](https://aws.amazon.com/eventbridge/).
 
 ## Disclaimer
 
-I stopped editing the code as soon as it worked - so it's ugly, and has more opportunities for cleanup and improvement than one might expect from such a simple app.  Yes, I reassign values to the same strings. Yes, I have the same code in multiple places that could be abstracted out. The entire thing is just a bunch of string concatenation. I know, I know. More importantly, **I only tested this on some five or six different schemas**.
+The code itself is sorta ugly, and opportunities for cleanup and improvement. There's a fair bit of string concatenation. More importantly, **I only tested this on some five or six different schemas**, all of which were for AWS events. Also note that there is **no exception handling** (with one exception, no pun intended). And no unit tests!!
 
-Also note that there is **no exception handling**. If there's an error, you'll see it ;-)
+## Known issue
 
-### Known issue
-
-For one of the schemas I tested (in file aws.codepipeline@CodePipelineStageExecutionStateChange-v1.json), the "detail.properties.version" property is listed as "string" type in the json schema doc. But when I actually used the generated class in a Lambda function that consumes real events, the deserialization barfs, complaining that the actual value is an int (which it is, in the actual event json).  The generated class could work around this by having more complicated getters/setters, and making the appropriate conversion, but it doesn't yet do that. But this is pretty minor.
+For one of the schemas I tested (in file aws.codepipeline@CodePipelineStageExecutionStateChange-v1.json), the detail property's properties.version attribute property is listed as "string" type in the json schema doc. But when I actually used the generated class in a Lambda function that consumes real events, the deserialization barfs, complaining that the actual value is a numnber (an int).  And in fact, in the actual event json, there are no quotes around the numeric value. So maybe this is an error in AWS's schemas, or something else.  The generated class could work around this by having more complicated getters/setters, and making the appropriate conversion, but it doesn't yet do that. But this is pretty minor.
 
 ## Getting Schemas
 
@@ -51,3 +49,29 @@ As an example, the output of `BindingGenerator test` will create the following f
  * CodeBuildBuildPhaseChangeDetailAdditionalInformationVpcConfig.cs
  * EnvironmentItem.cs
  * VpcConfigItem.cs
+
+## Using Generated Classes
+
+I've only tested a single one of the classes in an actual Lambda function so far. You can use the class that has the same name as the folder they're written to as the Lambda event type, as in this example, which uses the code generated from schema aws.codepipeline@CodePipelineStageExecutionStateChange-v1.json.
+
+Be sure to copy the generated folder full of generated classes into your project and adjust any namespaces if desired.
+
+```c#
+using Amazon.Lambda.Core;
+
+// Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
+[assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
+
+namespace PipelineStateChangeHandler
+{
+    public class Function
+    {
+        public void FunctionHandler(CodePipelineStageExecutionStateChange pipelineEvent, ILambdaContext context)
+        {
+            LambdaLogger.Log($"Account ID: {pipelineEvent.Account}, Pipeline: {pipelineEvent.Detail.Pipeline}");
+            LambdaLogger.Log($"Stage: {pipelineEvent.Detail.Stage}, state: {pipelineEvent.Detail.State}");
+            LambdaLogger.Log($"Resources array count: {pipelineEvent.Resources.Length}");
+        }
+    }
+}
+```
