@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 
-namespace BindingGenerator
+namespace EventBridgeBindingGenerator
 {
     public class Member
     {
@@ -84,7 +84,7 @@ namespace BindingGenerator
 
         private JsonElement GetElementByPath(string path)
         {
-            var propNames = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
+            var propNames = path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
             if (!propNames.Any()) throw new Exception("Element path is not valid!");
 
             var je = Generator.Schema.RootElement;
@@ -114,7 +114,7 @@ namespace BindingGenerator
 
         public static string GetMemberName(string jsonPropName)
         {
-            var pieces = jsonPropName.Split("-", StringSplitOptions.RemoveEmptyEntries);
+            var pieces = jsonPropName.Split(new char[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
             var sb = new StringBuilder();
 
             foreach (var piece in pieces)

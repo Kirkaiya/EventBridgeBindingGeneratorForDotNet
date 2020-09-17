@@ -1,6 +1,9 @@
 # EventBridgeBindingGeneratorForDotNet
 
-A quick and dirty (very hacky!!) .NET Core console app that generates all the classes to use as bindings for deserializing EventBridge schemas. This is handy for generating the (sometimes many) classes if you're using a .NET Core Lambda function, for instance, as the target of an [AWS EventBridge rule](https://aws.amazon.com/eventbridge/).
+A quick and dirty .NET Standard 2.0 library that generates all the classes to use as bindings for deserializing EventBridge schemas. This is handy for generating the (sometimes many) classes if you're using a .NET Core Lambda function, for instance, as the target of an [AWS EventBridge rule](https://aws.amazon.com/eventbridge/).
+The generator library itself returns a byte array containing a zip file that has all the class files in it. 
+In order to demo this, there is also a trivial .NET Core 3.1 console app that passes in the schema as a string, and then writes the resulting zip file to disk.
+Depending on free time, I may create a .NET Core serverless app (API Gateway + Lambda) that lets you pick from the available schemas, and then returns the zip file to you.
 
 ## Disclaimer
 
@@ -9,6 +12,7 @@ The code itself is sorta ugly, and opportunities for cleanup and improvement. Th
 ## Known issue
 
 For one of the schemas I tested (in file aws.codepipeline@CodePipelineStageExecutionStateChange-v1.json), the detail property's properties.version attribute property is listed as "string" type in the json schema doc. But when I actually used the generated class in a Lambda function that consumes real events, the deserialization barfs, complaining that the actual value is a numnber (an int).  And in fact, in the actual event json, there are no quotes around the numeric value. So maybe this is an error in AWS's schemas, or something else.  The generated class could work around this by having more complicated getters/setters, and making the appropriate conversion, but it doesn't yet do that. But this is pretty minor.
+I've reported the issue to the EventBridge team, and they're looking into it.
 
 ## Getting Schemas
 

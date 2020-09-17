@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
+using EventBridgeBindingGenerator;
 
 namespace BindingGenerator
 {
@@ -23,8 +23,13 @@ namespace BindingGenerator
             var rawtext = File.ReadAllText(filepath);
 
             var generator = new Generator();
+            string schemaName;
 
-            generator.GenerateCodeFiles(rawtext);
+            var zipBytes = generator.GenerateCodeFiles(rawtext, out schemaName);
+            using (var fileStream = File.OpenWrite(schemaName + ".zip"))
+            {
+                fileStream.Write(zipBytes, 0, zipBytes.Length);
+            }
 
             Console.WriteLine("Code generation complete");
         }
