@@ -11,7 +11,7 @@ The code itself is sorta ugly, and opportunities for cleanup and improvement. Th
 
 ## Known issue
 
-For one of the schemas I tested (in file aws.codepipeline@CodePipelineStageExecutionStateChange-v1.json), the detail property's properties.version attribute property is listed as "string" type in the json schema doc. But when I actually used the generated class in a Lambda function that consumes real events, the deserialization barfs, complaining that the actual value is a numnber (an int).  And in fact, in the actual event json, there are no quotes around the numeric value. So maybe this is an error in AWS's schemas, or something else.  The generated class could work around this by having more complicated getters/setters, and making the appropriate conversion, but it doesn't yet do that. But this is pretty minor.
+For one of the schemas I tested (in file aws.codepipeline@CodePipelineStageExecutionStateChange-v1.json), the detail property's properties.version attribute property is listed as "string" type in the json schema doc. But when I actually used the generated class in a Lambda function that consumes real events, the deserialization barfs, complaining that the actual value is a number (an int).  And in fact, in the actual event json, there are no quotes around the numeric value. So maybe this is an error in AWS's schemas, or something else.  The generated class could work around this by having more complicated getters/setters, and making the appropriate conversion, but it doesn't yet do that. But this is pretty minor.
 I've reported the issue to the EventBridge team, and they're looking into it.
 
 ## Getting Schemas
