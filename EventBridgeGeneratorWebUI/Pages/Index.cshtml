@@ -1,0 +1,25 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<h2>AWS EventBridge Events Binding Classes Generator</h2>
+
+<form method="post">
+
+    <div class="form-group">
+        <label class="control-label">Enter a prefix string to filter schemas (eg, "codepipeline"):</label>
+        <input name="FilterText" class="form-control" />
+        <input type="submit" value="Apply Filter" asp-page-handler="ApplyFilter"/>
+    </div>
+    <p></p>
+    <div class="form-group">
+        Select schema: <select name="SchemaSelect" asp-items="Model.SchemaNames"></select> (1st 100 shown)
+    </div>
+    <p></p>
+    <div class="form-group">
+        <input type="submit" value="Generate C# Classes" asp-page-handler="GenerateCode"/>
+    </div>
+
+</form>
