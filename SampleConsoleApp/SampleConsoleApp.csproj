@@ -2,8 +2,18 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="GeneratedSchemas\**" />
+    <EmbeddedResource Remove="GeneratedSchemas\**" />
+    <None Remove="GeneratedSchemas\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.Schemas" Version="4.0.0.1" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\EventBridgeBindingGenerator\EventBridgeBindingGenerator.csproj" />

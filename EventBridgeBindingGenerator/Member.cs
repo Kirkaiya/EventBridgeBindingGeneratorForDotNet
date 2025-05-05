@@ -35,15 +35,24 @@ namespace EventBridgeBindingGenerator
                         //array items are of complex type
                         IsArrayOfComplexType = true;
                         var childNodePath = elementsType.First().Value.GetString().TrimStart('#', '"');
-                        ChildNode = GetElementByPath(childNodePath).GetProperty("properties");
-                        TypeName = GetMemberName(childNodePath.Substring(childNodePath.LastIndexOf('/') + 1));
+
+                        if (GetElementByPath(childNodePath).TryGetProperty("properties", out var childNodeProps)) {
+                            ChildNode = childNodeProps;
+                            TypeName = GetMemberName(childNodePath.Substring(childNodePath.LastIndexOf('/') + 1));
+                        } 
+                        else if (GetElementByPath(childNodePath).TryGetProperty("additionalProperties", out var additionalProps))
+                        {
+                            TypeName = "dynamic";
+                        }
+
                     } else {
                         TypeName = arrayVal.GetProperty("type").GetString();
                     }
 
                 } else
                 {
-                    TypeName = firstVal.GetString();
+                    var isNullable = fields.FirstOrDefault(x => x.Key == "nullable").Key != null;
+                    TypeName = firstVal.GetString() + (isNullable ? "?" : string.Empty);
                 }
             }
 
@@ -114,6 +123,12 @@ namespace EventBridgeBindingGenerator
 
         public static string GetMemberName(string jsonPropName)
         {
+            if (jsonPropName.IndexOf('.') > 0)
+            {
+                var fixedMemberName = Generator.GetNormalizedClassOrMemberName(jsonPropName);
+                return fixedMemberName;
+            }
+
             var pieces = jsonPropName.Split(new char[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
             var sb = new StringBuilder();
 
