@@ -3,7 +3,7 @@
 A quick and dirty .NET Standard ~~2.0~~ 2.1 library that generates all the classes to use as bindings for deserializing EventBridge schemas. This is handy for generating the (sometimes many) classes that map to a complex JSON EventBridge schema. For example, if you're using a .NET Lambda function (or anything else) as the target of an [AWS EventBridge rule](https://aws.amazon.com/eventbridge/).
 The generator library itself has two public methods: 
 
- * `GenerateCodeFilesAsStrings` returns a List<ClassContainer>, where ClassContainer has the class name, the class as a string, and a ChildClasses property of List<ClassContainer>. This is useful if you want to organize child classes into folders, or add hierarchical namespaces or something. Use a recursive function to retrieve them all - see example in SampleConsoleApp.
+ * `GenerateCodeFilesAsStrings` returns a `List<ClassContainer>`, where ClassContainer has the class name, the class as a string, and a ChildClasses property of type `List<ClassContainer>`. This is useful if you want to organize child classes into folders, or add hierarchical namespaces or something. Use a recursive function to retrieve them all - see example in SampleConsoleApp.
  * `GenerateCodeFiles` returns a byte array containing a zip file that has all the class files in it (not nested). This is the original one I wrote in 2020, and I kept it to avoid rewriting the sample web app :-)
 
 In order to demo this, there is a simple .NET 8 console app that can either use the included test schema, fetch your discovered schnemas from EventBridge, or you can pass in a schema file path, and the resulting C# class files are written to a new "GeneratedClasses" folder.
